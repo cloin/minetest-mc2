@@ -1,0 +1,17 @@
+# Set the base image to use the upstream project
+ARG BASE_IMAGE=registry.gitlab.com/minetest/minetest/server:latest
+FROM $BASE_IMAGE
+
+# Set up the environment variables if needed
+ENV MINETEST_GAME_VERSION master
+
+# Install git
+USER root
+RUN apk add --no-cache git
+
+# Clone your new game and add it to the games directory
+RUN git clone --depth=1 -b ${MINETEST_GAME_VERSION} https://git.minetest.land/MineClone2/MineClone2 /usr/local/share/minetest/games/mineclone2 && \
+    rm -fr /usr/local/share/minetest/games/mineclone2/.git
+
+# Switch back to the minetest user
+USER minetest:minetest

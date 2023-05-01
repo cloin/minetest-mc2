@@ -1,0 +1,23 @@
+---
+version: "2.1"
+services:
+  minetest:
+    build: 
+      dockerfile: minetest-mc2-dockerfile
+    command: ["--config", "/etc/minetest/minetest.conf", "--gameid", "mineclone2", "--port", "30000"]
+    user: root
+    container_name: minetest
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - minetest_data:/var/lib/minetest/
+      - ./config:/etc/minetest/
+      - ./mods:/var/lib/minetest/.minetest/worlds/world/worldmods
+    ports:
+      - 30000:30000/udp
+    restart: unless-stopped
+
+volumes:
+  minetest_data:
